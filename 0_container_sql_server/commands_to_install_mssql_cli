@@ -1,0 +1,18 @@
+
+docker exec -t -i --user root bb564b5b4782 /bin/bash
+
+
+apt update
+apt install curl
+apt-get update && apt-get install -y gnupg2
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+apt-get install software-properties-common
+apt-get update
+apt-add-repository https://packages.microsoft.com/ubuntu/18.04/prod
+   14  echo $?
+apt-get update
+apt-get install mssql-cli
+apt-get install -f
+mssql-cli  -U sa -P 1Secure*Password1
+
+

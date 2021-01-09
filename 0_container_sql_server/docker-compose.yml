@@ -1,0 +1,49 @@
+version: '3.3'
+
+services:
+   db:
+     image: mcr.microsoft.com/mssql/server:2019-latest
+     volumes:
+       - db_data:/home/leyner/Documentos/ultracom/tarea\ 58\,\ consultor\ gcp\ proteccion/arquitectura/pythonSeed/Yohan/H3_enviromentCreation/coneccion_azure_gcp
+     ports:
+       - 1433:1433
+     environment:
+       ACCEPT_EULA: Y
+       SA_PASSWORD: 1Secure*Password1
+       MSSQL_AGENT_ENABLED: 'True'
+       MSSQL_PID: Enterprise
+       
+     networks:
+      - app-tier
+
+   conne_python_extractor:
+     restart: always
+     depends_on:
+       - db
+     image: data_source_sql_server_extractor
+     networks:
+      - app-tier
+
+   conne_python_insertor:
+     restart: always
+     depends_on:
+       - db
+     image: data_source_sql_server_insertor
+     networks:
+      - app-tier
+
+   conne_python_sender:
+     ports:
+       - 5000:5000
+     image: data_dest_sender
+     networks:
+      - app-tier
+
+
+networks:
+  app-tier:
+    driver: bridge
+    
+volumes:
+    myapp:
+    db_data: {}

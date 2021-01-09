@@ -1,0 +1,24 @@
+CREATE Database testdb;
+
+
+CREATE TABLE testdb.dbo.info (
+    id int NOT NULL IDENTITY PRIMARY KEY,
+    value VARCHAR(50) NOT NULL,
+); 
+
+use testdb; execute sys.sp_cdc_enable_db;
+
+
+
+
+EXEC sys.sp_cdc_enable_table 
+@source_schema = N'dbo', 
+@source_name   = N'info', 
+@role_name     = NULL, 
+@captured_column_list = '[id],[value]';
+
+
+insert into testdb.dbo.info values(1, 'abc');
+
+
+SELECT * FROM cdc.dbo_info_CT

@@ -1,0 +1,29 @@
+FROM python:3.7-slim AS compile-image
+
+WORKDIR /app
+
+COPY . .
+
+RUN apt-get update && apt-get install -y tdsodbc unixodbc-dev \
+ && apt install unixodbc-bin -y  \
+ && apt-get clean -y
+
+RUN echo "[FreeTDS]\n\
+Description = FreeTDS unixODBC Driver\n\
+Driver = /usr/lib/arm-linux-gnueabi/odbc/libtdsodbc.so\n\
+Setup = /usr/lib/arm-linux-gnueabi/odbc/libtdsS.so" >> /etc/odbcinst.ini
+
+RUN pip install --trusted-host pypi.python.org pyodbc
+
+FROM python:3.7-slim AS build-image
+COPY --from=compile-image /root/.local /root/.local
+
+
+ENV PATH=/root/.local/bin:$PATH
+WORKDIR /app
+COPY  bfi_data_suplier.py .
+#COPY  modelPickle .
+#expose 5000
+# nginx es como apache server y la expocision la hariamos con kubernetes ingress
+#CMD ["gunicorn", "-b", "0.0.0.0:5000", "app"]
+CMD ["python", "bfi_data_suplier.py]
