@@ -1,6 +1,7 @@
 import uuid
 import pyodbc
 import datetime
+import logging
 
 
 server = 'db'

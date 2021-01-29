@@ -1,0 +1,59 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: db
+    build:
+      context: 0_container_sql_server
+      dockerfile: Dockerfile
+    volumes:
+      - db_data:/var/lib/mssql/data/
+    ports:
+      - 1433:1433
+    env_file:
+      - .env
+    networks:
+      - app-tier
+
+  data_source:
+    container_name: data_source
+    build: 
+      context: 2_cdc_data_bringer
+      dockerfile: Dockerfile
+    env_file: 
+      - .env
+    depends_on:
+      - db
+    networks:
+      - app-tier
+
+  conne_python_insertor:
+    container_name: python_insertor
+    build: 
+      context: 1_container_insert_data
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - app-tier
+
+  conne_python_sender:
+    container_name: data_destination
+    build: 
+      context: 3_container_send_events
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - app-tier
+
+
+networks:
+  app-tier:
+    driver: bridge
+    
+volumes:
+    myapp:
+    db_data: {}
