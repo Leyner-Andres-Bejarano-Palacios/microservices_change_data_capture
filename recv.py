@@ -13,11 +13,11 @@ async def on_event(partition_context, event):
 
 async def main():
     # Create an Azure blob checkpoint store to store the checkpoints.
-    checkpoint_store = BlobCheckpointStore.from_connection_string("DefaultEndpointsProtocol=https;AccountName=sqlva4nai6xe4wyims;AccountKey=0VJjrdlBoYad8bKWikPW7SHkA/oOVT8fNKK77FsqEE3u5C8LmavwQbwc2EFciv1ckwxtVLwdpyqc6O1u5csdgw==;EndpointSuffix=core.windows.net",\
-                                                                  "streamingstorage")
+    checkpoint_store = BlobCheckpointStore.from_connection_string("DefaultEndpointsProtocol=https;AccountName=storagestreamingg;AccountKey=J+CI/bRN7fe1lFP8azsPcluMgIkySFfJdMdezunMzqU6XKjoTm7ixMrGiQMiOjrcaVl2TKAQCyaE9vMztPrpYA==;EndpointSuffix=core.windows.net",\
+                                                                  "streamingstoragee")
 
     # Create a consumer client for the event hub.
-    client = EventHubConsumerClient.from_connection_string("Endpoint=sb://eventhubss1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=s+gBt9n8Tdkq+2wWBVL4NqDZYBUFaza9/TCdX8NnSC4=",\
+    client = EventHubConsumerClient.from_connection_string("Endpoint=sb://eventhubss1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=dVONFNgFZXiMbGsoWQX9YSzp7q0AZ3f3jxrTPCK/iEc=",\
                                                            consumer_group="$Default",\
                                                            eventhub_name="firsttopic",\
                                                            checkpoint_store=checkpoint_store)
@@ -28,4 +28,4 @@ async def main():
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     # Run the main method.
-    loop.run_until_complete(main())   
+    loop.run_until_complete(main()) 

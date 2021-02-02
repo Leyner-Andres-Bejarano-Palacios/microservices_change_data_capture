@@ -12,9 +12,9 @@ RUN pip install -r /app/requirements.txt
 # Remove Unneeded PIP Cache after Install
 RUN rm -rf /.cache
 
-COPY  bfi_event_sender.py /app/
+COPY  . /app/
 #COPY  modelPickle .
 EXPOSE 5000
 # nginx es como apache server y la expocision la hariamos con kubernetes ingress
 #CMD ["gunicorn", "-b", "0.0.0.0:5000", "app"]
-CMD ["python", "/app/bfi_event_sender.py"]
+CMD ["python", "/app/EventSender.py", "-p","configs/sender.ini"]

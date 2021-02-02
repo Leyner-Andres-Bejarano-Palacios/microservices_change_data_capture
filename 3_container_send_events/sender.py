@@ -5,14 +5,15 @@ import asyncio
 from azure.eventhub.aio import EventHubProducerClient
 
 class Sender:
-    def __init__(self):
+    def __init__(self,config):
         self._vName = self.__class__.__name__
         self._json_data = ""
+        self._config = config
 
 
     async def accummulate (self):
-        producer = EventHubProducerClient.from_connection_string(conn_str="Endpoint=sb://eventhubss1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=q1gy+i097l8UKkTJ0Png8qjO2jOXGyRCgxz59p0GSwY=",\
-                                                                eventhub_name="firsttopic")                                                    
+        producer = EventHubProducerClient.from_connection_string(conn_str=self._config['Azure']['ConneStringEventHub'],\
+                                                                eventhub_name=self._config['Azure']['eventhub_name'])                                                    
         async with producer:
             event_data_batch = await producer.create_batch()
             event_data_batch.add(EventData(self._json_data))
